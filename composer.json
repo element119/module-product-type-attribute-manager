@@ -1,7 +1,7 @@
 {
-    "name": "element119/module-name",
+    "name": "element119/module-product-type-attribute-manager",
     "type": "magento2-module",
-    "description": "A Magento 2 module that...",
+    "description": "A Magento 2 module to allow admins to control which product attributes are applicable to different product types.",
     "license": "proprietary",
     "authors": [
         {
@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Element119\\ModuleName\\": ""
+            "Element119\\ProductTypeAttributeManager\\": ""
         },
         "files": [
             "registration.php"
