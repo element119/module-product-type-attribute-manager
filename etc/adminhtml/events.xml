@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © element119. All rights reserved.
+ * See LICENCE.txt for licence details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="product_attribute_form_build_main_tab">
+        <observer name="add_apply_to_field"
+                  instance="Element119\ProductTypeAttributeManager\Observer\AddApplyToField"/>
+    </event>
+</config>
