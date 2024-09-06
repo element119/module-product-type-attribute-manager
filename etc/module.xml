@@ -10,6 +10,7 @@
     <module name="Element119_ProductTypeAttributeManager">
         <sequence>
             <module name="Magento_Catalog"/>
+            <module name="Magento_Eav"/>
         </sequence>
     </module>
 </config>
