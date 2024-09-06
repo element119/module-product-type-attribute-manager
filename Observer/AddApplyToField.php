@@ -48,7 +48,7 @@ class AddApplyToField implements ObserverInterface
         }
 
         $fieldset->addField(
-            EavAttributeInterface::APPLY_TO,
+            EavAttributeInterface::APPLY_TO . '[]',
             'multiselect',
             [
                 'name' => EavAttributeInterface::APPLY_TO,
@@ -56,6 +56,10 @@ class AddApplyToField implements ObserverInterface
                 'title' => __('Apply To Product Types'),
                 'note' => __('Attribute will be applied to selected product types.'),
                 'values' => $this->productTypes->toOptionArray(),
+
+                // fallback to all product types because Magento treats null values as being applied to all types
+                'value' => $this->eavAttributeResource->getAttributeProductTypes((int)$attributeId)
+                    ?: array_column($this->productTypes->toOptionArray(), 'value'),
             ]
         );
     }
