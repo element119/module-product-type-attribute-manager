@@ -7,20 +7,28 @@ declare(strict_types=1);
 
 namespace Element119\ProductTypeAttributeManager\Plugin;
 
+use Element119\ProductTypeAttributeManager\Model\ResourceModel\EavAttributeResource;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save as ProductAttributeSave;
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\App\RequestInterface;
 
 class SaveAttributeProductTypes
 {
     public function __construct(
+        private readonly EavAttributeResource $eavAttributeResource,
         private readonly RequestInterface $request,
     ) {
     }
 
     public function beforeExecute(ProductAttributeSave $subject): void
     {
+        $attributeId = $this->request->getParam(AttributeInterface::ATTRIBUTE_ID);
         $postData = $this->request->getPostValue();
+
+        if (!$postData || !isset($attributeId) || !$this->eavAttributeResource->isSystemAttribute((int)$attributeId)) {
+            return;
+        }
 
         if (!array_key_exists(EavAttributeInterface::APPLY_TO, $postData)) {
             /**
