@@ -28,9 +28,13 @@ class AddApplyToField implements ObserverInterface
 
     public function execute(Observer $observer): void
     {
+        $actionName = $this->request->getBeforeForwardInfo('action_name');
         $attributeId = $this->request->getParam(AttributeInterface::ATTRIBUTE_ID);
 
-        if (!isset($attributeId) || !$this->eavAttributeResource->isSystemAttribute((int)$attributeId)) {
+        if (isset($attributeId)
+            ? !$this->eavAttributeResource->isSystemAttribute((int)$attributeId)
+            : $actionName !== 'new'
+        ) {
             return;
         }
 
@@ -47,6 +51,8 @@ class AddApplyToField implements ObserverInterface
             return;
         }
 
+        $allProductTypes = array_column($this->productTypes->toOptionArray(), 'value');
+
         $fieldset->addField(
             EavAttributeInterface::APPLY_TO . '[]',
             'multiselect',
@@ -58,8 +64,9 @@ class AddApplyToField implements ObserverInterface
                 'values' => $this->productTypes->toOptionArray(),
 
                 // fallback to all product types because Magento treats null values as being applied to all types
-                'value' => $this->eavAttributeResource->getAttributeProductTypes((int)$attributeId)
-                    ?: array_column($this->productTypes->toOptionArray(), 'value'),
+                'value' => $attributeId
+                    ? $this->eavAttributeResource->getAttributeProductTypes((int)$attributeId) ?: $allProductTypes
+                    : $allProductTypes,
             ]
         );
     }
